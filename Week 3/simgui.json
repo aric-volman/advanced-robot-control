@@ -1,0 +1,89 @@
+{
+  "HALProvider": {
+    "Other Devices": {
+      "Talon SRX[14]": {
+        "header": {
+          "open": true
+        }
+      },
+      "Talon SRX[14]/Analog In": {
+        "header": {
+          "open": true
+        }
+      },
+      "Talon SRX[14]/Fwd Limit": {
+        "header": {
+          "open": true
+        }
+      },
+      "Talon SRX[14]/Pulse Width Input": {
+        "header": {
+          "open": true
+        }
+      },
+      "Talon SRX[14]/Quad Encoder": {
+        "header": {
+          "open": true
+        }
+      },
+      "Talon SRX[14]/Rev Limit": {
+        "header": {
+          "open": true
+        }
+      },
+      "Talon SRX[16]": {
+        "header": {
+          "open": true
+        }
+      },
+      "Talon SRX[16]/Analog In": {
+        "header": {
+          "open": true
+        }
+      },
+      "Talon SRX[16]/Rev Limit": {
+        "header": {
+          "open": true
+        }
+      },
+      "Talon SRX[17]": {
+        "header": {
+          "open": true
+        }
+      },
+      "Talon SRX[17]/Analog In": {
+        "header": {
+          "open": true
+        }
+      },
+      "Talon SRX[17]/Pulse Width Input": {
+        "header": {
+          "open": true
+        }
+      },
+      "Talon SRX[17]/Quad Encoder": {
+        "header": {
+          "open": true
+        }
+      },
+      "Talon SRX[17]/Rev Limit": {
+        "header": {
+          "open": true
+        }
+      }
+    }
+  },
+  "NTProvider": {
+    "types": {
+      "/FMSInfo": "FMSInfo",
+      "/LiveWindow/Shooter": "Subsystem",
+      "/LiveWindow/Ungrouped/PIDController[1]": "PIDController",
+      "/LiveWindow/Ungrouped/PIDController[2]": "PIDController",
+      "/LiveWindow/Ungrouped/PIDController[3]": "PIDController",
+      "/LiveWindow/Ungrouped/Scheduler": "Scheduler",
+      "/LiveWindow/Ungrouped/Talon SRX [14]": "Motor Controller",
+      "/LiveWindow/Ungrouped/Talon SRX [16]": "Motor Controller",
+      "/LiveWindow/Ungrouped/Talon SRX [17]": "Motor Controller"
+    }
+  }
+}
