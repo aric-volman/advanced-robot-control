@@ -197,7 +197,9 @@ public class Shooter extends SubsystemBase {
   }
 
   public double getPivotVelocityInRad() {
-    return pivot.getSelectedSensorVelocity(0);
+    // Converts rotations per second to radians per second
+    // 2PI is one rotation, so multiplication makes sense
+    return ((encoderConst*pivot.getSelectedSensorPosition(0) * 10)/4096.0) * 2 * Math.PI;
   }
 
   public double getPivotPosition(){
@@ -213,9 +215,7 @@ public class Shooter extends SubsystemBase {
   }
 
   public double getRawPivotPositionNotOffset() {
-    // Converts rotations per second to radians per second
-    // 2PI is one rotation, so multiplication makes sense
-    return ((encoderConst*pivot.getSelectedSensorPosition(0) * 10)/4096.0) * 2 * Math.PI;
+    return ((encoderConst*pivot.getSelectedSensorPosition(0)));
   }
 
   public void setPivotPower(double power) {
@@ -251,7 +251,7 @@ public class Shooter extends SubsystemBase {
     SmartDashboard.putNumber("Raw Pivot Angle with No Offset", getRawPivotPositionNotOffset()); 
     SmartDashboard.putNumber("Pivot Power", getPivotPower());
 
-    SmartDashboard.putNumber("Pivot Velocity", getPivotVelocityInRad());
+    SmartDashboard.putNumber("Pivot Velocity In Radians", getPivotVelocityInRad());
 
     // If the button is pressed, and the timer is over 1.0 s, toggle
     // the manual-to-auto override, and reset the timer.
@@ -290,11 +290,11 @@ public class Shooter extends SubsystemBase {
 
       updatePivotAnglePIDF(); // Constantly holds the angle and re-calculates PIDF
 
-    } else if (!override) { // Default manual override
+  } else if (!override) { // Default manual override
       setFlywheelPower(-1.0*RobotContainer.getJoy1().getX());
       setPivotPower(-1.0*RobotContainer.getJoy1().getY());
       roller.set(0.0);
-    }
+  }
 
     // Week 2 - set PID using Shuffleboard
     leftFlywheelPID.setPID(leftFlywheelPIDP.getDouble(Constants.leftFlywheelPIDConsts.pidP), leftFlywheelPIDI.getDouble(Constants.leftFlywheelPIDConsts.pidI), leftFlywheelPIDD.getDouble(Constants.leftFlywheelPIDConsts.pidD));
