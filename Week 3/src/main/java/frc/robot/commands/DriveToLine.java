@@ -15,20 +15,22 @@ public class DriveToLine extends CommandBase {
   boolean finished;
 
   double displacement; // Displacement in meters
-  double _drivespeed;
+  double drivespeed;
 
   public DriveToLine(DriveTrain driveTrain, double speed) {
     // Use addRequirements() here to declare subsystem dependencies.
     dt = driveTrain;
     addRequirements(dt);
-    displacement = 1.0;
-    _drivespeed = (displacement >= 0 ? 1 : -1) * Math.abs(speed);
+    displacement = 1.0 - dt.getDTLOffset();
+
+    drivespeed = dt.getDTLDirection() * Math.abs(speed);
   }
 
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
     finished = false;
+    displacement = 1.0 - dt.getDTLOffset();
     dt.tankDrive(0.0, 0.0);
     dt.resetEncoders();
   }
@@ -36,11 +38,11 @@ public class DriveToLine extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    // The magnitude of the displacement vector is independent of direction
+    // The magnitude of the displacement vector is independent of its direction
     if (Math.abs(dt.getDisplacement()) < Math.abs(displacement)) {
       SmartDashboard.putNumber("Average Displacement", Math.abs(dt.getDisplacement()));
-      // The direction of the displacement vector is independent of magnitude
-      dt.tankDrive(_drivespeed, _drivespeed);
+      // The direction of the displacement vector is independent of its magnitude
+      dt.tankDrive(drivespeed, drivespeed);
     }
     else {
       finished = true;

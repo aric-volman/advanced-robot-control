@@ -26,26 +26,26 @@ public final class Constants {
     }
 
     public static final class leftFlywheelPIDConsts {
-        public static double pidP = 0.0;
+        public static double pidP = 0.02; // According to SysID
         public static double pidI = 0.0;
         public static double pidD = 0.0;
     }
 
     public static final class rightFlywheelPIDConsts {
-        public static double pidP = 0.0;
+        public static double pidP = 0.02;
         public static double pidI = 0.0;
         public static double pidD = 0.0;
     }
     
     public static final class leftFlywheelFF {
-        public static final double kS = 0.0;
-        public static final double kV = 0.0;
-        public static final double kA = 0.0;
+        public static final double kS = 0.58862;
+        public static final double kV = 0.29497;
+        public static final double kA = 0.011029;
     }
         
     public static final class rightFlywheelFF {
-        public static final double kS = 0.0;
-        public static final double kV = 0.0;
-        public static final double kA = 0.0;
+        public static final double kS = 0.50034;
+        public static final double kV = 0.29242;
+        public static final double kA = 0.010861;
     }        
 }
