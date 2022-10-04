@@ -4,6 +4,8 @@
 
 // How to calculate kF:
 // (Percent Motor Output% X 1023) / Native velocity
+// This formula aligns with Team 6377's whitepaper on Motion Magic
+// https://howdybots.org/wp-content/uploads/2019/12/Dont_Break_Your_Bot_Whitepaper-V1.pdf
 
 // CTRE Docs on use of IntegralZone:
 // Hint: it resets the Integral after a certain value
