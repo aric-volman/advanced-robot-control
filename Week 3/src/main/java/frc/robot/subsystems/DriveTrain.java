@@ -9,18 +9,20 @@ package frc.robot.subsystems;
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.FeedbackDevice;
 import com.ctre.phoenix.motorcontrol.InvertType;
+import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 import com.ctre.phoenix.motorcontrol.can.VictorSPX;
 
 import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.wpilibj.SPI;
+import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.RobotContainer;
 import frc.robot.Constants;
 import frc.robot.Robot;
-import frc.robot.RobotContainer;
 
 import com.kauailabs.navx.frc.AHRS;
 
@@ -32,15 +34,17 @@ public class DriveTrain extends SubsystemBase
   private final VictorSPX _leftDriveVictor;
   private final VictorSPX _rightDriveVictor;
 
+  // private final DifferentialDrive diff;
+
   private AHRS navx = new AHRS(SPI.Port.kMXP);
 
-  private int DriveToLineDirection = 1;
+  private double DriveToLineDirection = 1.0;
   private double DriveToLineOffset = 0.0;
 
   private ShuffleboardTab DTLTab = Shuffleboard.getTab("Drive To Line");
-  private NetworkTableEntry SwitchDirection = DTLTab.add("Direction", 1).getEntry();
+  private NetworkTableEntry SwitchDirection = DTLTab.add("Direction", 1.0).getEntry();
   private NetworkTableEntry DTLDisplacement = DTLTab.add("Displacement", 0.0).getEntry();
-  private NetworkTableEntry DTLOffset = DTLTab.add("Displacement", 0.0).getEntry();
+  private NetworkTableEntry DTLOffset = DTLTab.add("Offset", 0.0).getEntry();
   private NetworkTableEntry LeftVelocity = DTLTab.add("Left Native Velocity", 0.0).getEntry();
   private NetworkTableEntry RightVelocity = DTLTab.add("Right Native Velocity", 0.0).getEntry();
 
@@ -53,33 +57,51 @@ public class DriveTrain extends SubsystemBase
 
     _leftDriveVictor.follow(leftDriveTalon);
     _rightDriveVictor.follow(rightDriveTalon);
+  
+    leftDriveTalon.setNeutralMode(NeutralMode.Coast);
+    rightDriveTalon.setNeutralMode(NeutralMode.Coast);
 
-    leftDriveTalon.setInverted(true);
-    rightDriveTalon.setInverted(false);
+    leftDriveTalon.setInverted(false);
+    rightDriveTalon.setInverted(true);
     _leftDriveVictor.setInverted(InvertType.FollowMaster);
     _rightDriveVictor.setInverted(InvertType.FollowMaster);
+
+    leftDriveTalon.setSensorPhase(true);
+    rightDriveTalon.setSensorPhase(true);
 
     leftDriveTalon.configFactoryDefault();
     leftDriveTalon.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Relative, 0, 10);
     rightDriveTalon.configFactoryDefault();
-
-
     rightDriveTalon.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Relative, 0, 10);
+    
+    // Week 4 Motion Magic
+    leftDriveTalon.config_kP(0, 5, Constants.driveMMconsts.kTimeoutMs);
+    leftDriveTalon.config_kI(0, Constants.driveMMconsts.kI, Constants.driveMMconsts.kTimeoutMs);
+    leftDriveTalon.config_kD(0, Constants.driveMMconsts.kD, Constants.driveMMconsts.kTimeoutMs);
+    // DO NOT CHANGE ACCELERATION
+    leftDriveTalon.configMotionAcceleration(510, Constants.driveMMconsts.kTimeoutMs);
+    leftDriveTalon.configMotionCruiseVelocity(Constants.driveMMconsts.kVelocity, Constants.driveMMconsts.kTimeoutMs);
+
+    rightDriveTalon.config_kP(0, 5, Constants.driveMMconsts.kTimeoutMs);
+    rightDriveTalon.config_kI(0, Constants.driveMMconsts.kI, Constants.driveMMconsts.kTimeoutMs);
+    rightDriveTalon.config_kD(0, Constants.driveMMconsts.kD, Constants.driveMMconsts.kTimeoutMs);
+    // DO NOT CHANGE ACCELERATION
+    rightDriveTalon.configMotionAcceleration(300, Constants.driveMMconsts.kTimeoutMs);
+    rightDriveTalon.configMotionCruiseVelocity(Constants.driveMMconsts.kVelocity, Constants.driveMMconsts.kTimeoutMs);
+
+   // diff = new DifferentialDrive(leftDriveTalon, rightDriveTalon);
 
   }
 
   public void tankDrive(double leftSpeed, double rightSpeed) {
-    if (Math.abs(leftSpeed) < 0.1){
-      leftSpeed = 0;
-    }
-    if (Math.abs(rightSpeed) < 0.1){
-      rightSpeed = 0;
-    } 
-    rightDriveTalon.set(ControlMode.PercentOutput, -rightSpeed);  
-    leftDriveTalon.set(ControlMode.PercentOutput, -leftSpeed);
+    //diff.tankDrive(leftSpeed, rightSpeed);
+    rightDriveTalon.set(rightSpeed);
+    leftDriveTalon.set(leftSpeed);
+  }
 
-    /*SmartDashboard.putNumber("leftPow:", leftSpeed);
-    SmartDashboard.putNumber("rightPow:", rightSpeed);*/
+  public void magicDrive(double displacement) {
+    leftDriveTalon.set(ControlMode.MotionMagic, Constants.DriveToLineConstants.ticksToMeters*displacement);
+    rightDriveTalon.set(ControlMode.MotionMagic, Constants.DriveToLineConstants.ticksToMeters*displacement);
   }
 
   public void resetEncoders() {
@@ -88,14 +110,14 @@ public class DriveTrain extends SubsystemBase
   }
 
   public double getDisplacement() {
-    return (getTicks() * (Constants.DriveToLineConstants.ticksToMeters));  // average distance of both left and right
+    return (getTicks() / (Constants.DriveToLineConstants.ticksToMeters));
   }
 
   public double getDTLOffset() {
     return DriveToLineOffset;
   }
 
-  public int getDTLDirection() {
+  public double getDTLDirection() {
     return DriveToLineDirection;
   }
 
@@ -119,19 +141,21 @@ public class DriveTrain extends SubsystemBase
 
   @Override
   public void periodic() {
-    SmartDashboard.putNumber("NavX angle", getAngle());
+    // SmartDashboard.putNumber("NavX angle", getAngle());
+    SmartDashboard.putNumber("Left Voltage", leftDriveTalon.getMotorOutputPercent());
+    SmartDashboard.putNumber("Right Voltage", rightDriveTalon.getMotorOutputPercent());
     SmartDashboard.putNumber("Left Native Velocity", leftDriveTalon.getSelectedSensorVelocity());
     SmartDashboard.putNumber("Right Native Velocity", leftDriveTalon.getSelectedSensorVelocity());
 
-    DriveToLineDirection = (int) SwitchDirection.getDouble(1.0);
+    DriveToLineDirection = SwitchDirection.getDouble(1.0);
     DriveToLineOffset = DTLOffset.getDouble(0.0);
 
     DTLDisplacement.setDouble(getDisplacement());
 
     LeftVelocity.setDouble(leftDriveTalon.getSelectedSensorVelocity());
     RightVelocity.setDouble(rightDriveTalon.getSelectedSensorVelocity());
-
-    tankDrive(RobotContainer.getJoy1().getY(), RobotContainer.getJoy2().getY());
+    
+    tankDrive(RobotContainer.getJoy1().getY()*-0.2, RobotContainer.getJoy2().getY()*-0.2);
   }
 
   @Override

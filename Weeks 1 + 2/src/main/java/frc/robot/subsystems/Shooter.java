@@ -105,8 +105,8 @@ public class Shooter extends SubsystemBase {
 
   // The actual method for PIDF control
   public void setFlywheelConstantVelocity(double RPM) {
-    leftFlywheel.setVoltage((leftFlywheelFF.calculate(RPM/60.0)*60.0) + leftFlywheelPID.calculate(getLeftRPM(), RPM));
-    rightFlywheel.setVoltage((rightFlywheelFF.calculate(RPM/60.0)*60.0) + rightFlywheelPID.calculate(getRightRPM(), RPM));
+    leftFlywheel.setVoltage((leftFlywheelFF.calculate(RPM/60.0)) + leftFlywheelPID.calculate(getLeftRPM(), RPM));
+    rightFlywheel.setVoltage((rightFlywheelFF.calculate(RPM/60.0)) + rightFlywheelPID.calculate(getRightRPM(), RPM));
   }
   
   public double getAverageRPM() {
@@ -146,7 +146,7 @@ public class Shooter extends SubsystemBase {
 
     if (override) { // Auto code
       if (RobotContainer.getJoy1().getRawButton(1)) {
-        setFlywheelConstantVelocity(1000.0); // Sets it to 1000 RPM
+        setFlywheelConstantVelocity(800.0); // Sets it to 1000 RPM
       } else {
         setFlywheelConstantVelocity(0.0);
         setFlywheelPower(0.0);

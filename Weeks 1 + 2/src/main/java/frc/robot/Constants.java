@@ -26,13 +26,13 @@ public final class Constants {
     }
 
     public static final class leftFlywheelPIDConsts {
-        public static double pidP = 0.02; // According to SysID
+        public static double pidP = 0.005; // According to SysID
         public static double pidI = 0.0;
         public static double pidD = 0.0;
     }
 
     public static final class rightFlywheelPIDConsts {
-        public static double pidP = 0.02;
+        public static double pidP = 0.005;
         public static double pidI = 0.0;
         public static double pidD = 0.0;
     }

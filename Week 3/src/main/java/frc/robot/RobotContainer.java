@@ -24,7 +24,9 @@ public class RobotContainer {
   public static Joystick joystick1;
   public static Joystick joystick2;
   private final DriveTrain dt;
-` private final DriveToLine driveToLine;
+  //private final TankDrive td;
+  private final DriveToLine driveToLine;
+  private final MagicDrive magicDrive;
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
@@ -32,7 +34,10 @@ public class RobotContainer {
     joystick2 = new Joystick(Constants.USBOrder.One);
 
     dt = new DriveTrain();
-    driveToLine = new DriveToLine(dt, 0.3);
+    //td = new TankDrive(dt);
+    driveToLine = new DriveToLine(dt, 0.2);
+    magicDrive = new MagicDrive(dt);
+    //dt.setDefaultCommand(td);
 
     // Configure the button bindings
     configureButtonBindings();
