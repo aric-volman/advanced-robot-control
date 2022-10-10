@@ -8,6 +8,8 @@ import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
+import frc.robot.subsystems.*;
+import frc.robot.commands.*;
 
 /**
  * This class is where the bulk of the robot should be declared. Since Command-based is a
@@ -19,10 +21,16 @@ public class RobotContainer {
   // The robot's subsystems and commands are defined here...
 
   public static Joystick joystick1;
+  public static Joystick joystick2;
+  private final DriveToLine driveToLine;
+  private final DriveTrain dt;
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
-    joystick1 = new Joystick(0);
+    joystick1 = new Joystick(Constants.USBOrder.Zero);
+    joystick2 = new Joystick(Constants.USBOrder.One);
+    dt = new DriveTrain();
+    driveToLine = new DriveToLine(dt, 0.2);
     // Configure the button bindings
     configureButtonBindings();
   }
@@ -30,6 +38,10 @@ public class RobotContainer {
   public static Joystick getJoy1() {
     return joystick1;
   }
+
+  public static Joystick getJoy2() {
+    return joystick2;
+  } 
 
   /**
    * Use this method to define your button->command mappings. Buttons can be created by
@@ -46,6 +58,6 @@ public class RobotContainer {
    */
   public Command getAutonomousCommand() {
     // An ExampleCommand will run in autonomous
-    return null;
+    return driveToLine;
   }
 }

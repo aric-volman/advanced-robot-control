@@ -37,6 +37,18 @@ public final class Constants {
         public static final double kAcceleration = 0.0;
     }
 
+    public static final class DriveTrainPorts {
+        public static final int LeftDriveTalonPort = 2;
+        public static final int RightDriveTalonPort = 3;
+        public static final int LeftDriveVictorPort = 4;
+        public static final int RightDriveVictorPort = 5;
+    }
+
+    public static final class DriveToLineConstants {
+        public static final double wheelDiameterInInches = 6.0;
+        public static final double ticksToMeters = (1.0/(wheelDiameterInInches*0.0254*Math.PI))*4096.0;
+    }
+
     // In degrees, added, not subtracted
     public static final double angularOffset = 90.0;
     public static final double maxHorizontalVoltage = 0.2;
