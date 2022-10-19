@@ -9,11 +9,10 @@ import frc.robot.subsystems.DriveTrain;
 
 public class MagicDrive extends CommandBase {
   /** Creates a new MagicDrive. */
-  private double displacement = 2.0;
+  private double displacement = 1.0;
   private final DriveTrain dt;
-  public MagicDrive(DriveTrain driveTrain) {
-    // Use addRequirements() here to declare subsystem dependencies.
-    this.dt = driveTrain;
+  public MagicDrive(DriveTrain dt) {
+    this.dt = dt;
   }
 
   // Called when the command is initially scheduled.

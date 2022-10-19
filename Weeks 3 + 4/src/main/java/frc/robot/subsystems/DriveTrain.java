@@ -48,6 +48,12 @@ public class DriveTrain extends SubsystemBase
   private NetworkTableEntry LeftVelocity = DTLTab.add("Left Native Velocity", 0.0).getEntry();
   private NetworkTableEntry RightVelocity = DTLTab.add("Right Native Velocity", 0.0).getEntry();
 
+  // Week 4
+  private NetworkTableEntry leftTalonkP = DTLTab.add("Left kP", 5.0).getEntry();
+  private NetworkTableEntry rightTalonkP = DTLTab.add("Right kP", 5.0).getEntry();
+  private NetworkTableEntry leftTalonAccel = DTLTab.add("Left MM Accel", 510.0).getEntry();
+  private NetworkTableEntry rightTalonAccel = DTLTab.add("Right MM Accel", 300.0).getEntry();
+
   public DriveTrain() 
   {
     leftDriveTalon = new WPI_TalonSRX(Constants.DriveTrainPorts.LeftDriveTalonPort);
@@ -75,21 +81,19 @@ public class DriveTrain extends SubsystemBase
     rightDriveTalon.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Relative, 0, 10);
     
     // Week 4 Motion Magic
-    leftDriveTalon.config_kP(0, 5, Constants.driveMMconsts.kTimeoutMs);
-    leftDriveTalon.config_kI(0, Constants.driveMMconsts.kI, Constants.driveMMconsts.kTimeoutMs);
-    leftDriveTalon.config_kD(0, Constants.driveMMconsts.kD, Constants.driveMMconsts.kTimeoutMs);
-    // DO NOT CHANGE ACCELERATION
-    leftDriveTalon.configMotionAcceleration(510, Constants.driveMMconsts.kTimeoutMs);
-    leftDriveTalon.configMotionCruiseVelocity(Constants.driveMMconsts.kVelocity, Constants.driveMMconsts.kTimeoutMs);
+    leftDriveTalon.config_kP(0, 5.0, 10);
+    leftDriveTalon.config_kI(0, 0.0, 10);
+    leftDriveTalon.config_kD(0, 0.0, 10);
 
-    rightDriveTalon.config_kP(0, 5, Constants.driveMMconsts.kTimeoutMs);
-    rightDriveTalon.config_kI(0, Constants.driveMMconsts.kI, Constants.driveMMconsts.kTimeoutMs);
-    rightDriveTalon.config_kD(0, Constants.driveMMconsts.kD, Constants.driveMMconsts.kTimeoutMs);
-    // DO NOT CHANGE ACCELERATION
-    rightDriveTalon.configMotionAcceleration(300, Constants.driveMMconsts.kTimeoutMs);
-    rightDriveTalon.configMotionCruiseVelocity(Constants.driveMMconsts.kVelocity, Constants.driveMMconsts.kTimeoutMs);
+    leftDriveTalon.configMotionAcceleration(510.0, 10);
+    leftDriveTalon.configMotionCruiseVelocity(500.0, 10);
 
-   // diff = new DifferentialDrive(leftDriveTalon, rightDriveTalon);
+    rightDriveTalon.config_kP(0, 5.0, 10);
+    rightDriveTalon.config_kI(0, 0.0, 10);
+    rightDriveTalon.config_kD(0, 0.0, 10);
+
+    rightDriveTalon.configMotionAcceleration(300, 10);
+    rightDriveTalon.configMotionCruiseVelocity(500.0, 10);
 
   }
 
@@ -141,7 +145,6 @@ public class DriveTrain extends SubsystemBase
 
   @Override
   public void periodic() {
-    // SmartDashboard.putNumber("NavX angle", getAngle());
     SmartDashboard.putNumber("Left Voltage", leftDriveTalon.getMotorOutputPercent());
     SmartDashboard.putNumber("Right Voltage", rightDriveTalon.getMotorOutputPercent());
     SmartDashboard.putNumber("Left Native Velocity", leftDriveTalon.getSelectedSensorVelocity());
@@ -156,6 +159,12 @@ public class DriveTrain extends SubsystemBase
     RightVelocity.setDouble(rightDriveTalon.getSelectedSensorVelocity());
     
     tankDrive(RobotContainer.getJoy1().getY()*-0.2, RobotContainer.getJoy2().getY()*-0.2);
+
+    // Week 4
+    leftDriveTalon.config_kP(0, leftTalonkP.getDouble(5.0), 0);
+    rightDriveTalon.config_kP(0, rightTalonkP.getDouble(5.0), 0);
+    leftDriveTalon.configMotionAcceleration(leftTalonAccel.getDouble(510.0), 0);
+    rightDriveTalon.configMotionAcceleration(rightTalonAccel.getDouble(300.0), 0);
   }
 
   @Override

@@ -74,19 +74,6 @@ public final class Constants {
         public static final double kA = 0.0;
     }
 
-    public static final class driveMMconsts {
-        public static final double kP = 5.0;
-        public static final double kI = 0.0;
-        public static final double kD = 0.0;
-        public static final double kF = 0.0;
-        public static final double kIZone = 0.0;
-        public static final int kTimeoutMs = 10;
-        public static final double kPeakOutput = 0.8;
-        public static final double kVelocity = 500.0;
-        public static final double kAcceleration = 50.0;
-    }
-
-
     // In degrees, added, not subtracted
     public static final double angularOffset = 90.0;
     public static final double pivotVelocityInRadiansPerSecond = 0.0;
